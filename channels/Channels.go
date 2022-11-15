@@ -11,8 +11,7 @@ func main() {
 	channel := make(chan string)
 
 	go count("Lion", channel)
-	for {
-		msg := <-channel
+	for msg := range channel {
 		fmt.Println(msg)
 	}
 
