@@ -15,6 +15,30 @@ func main() {
 		fmt.Println(msg)
 	}
 
+	fmt.Println("+=+=+=+=+= Goroutine select +=+=+=+=+=")
+
+	c1 := make(chan string)
+	c2 := make(chan string)
+
+	go func ()  {
+		for {
+			c1 <- "Channel 1 beeps after 500ms"
+			time.Sleep(500 * time.Millisecond)
+		}
+	}()
+
+	go func ()  {
+		for {
+			c2 <- "Channel 2 beeps after every 2 seconds"
+			time.Sleep(2 * time.Second)
+		}
+	}()
+
+	for {
+		fmt.Println(<- c1)
+		fmt.Println(<- c2)
+	}
+
 }
 
 func count(thing string, c chan string) {
