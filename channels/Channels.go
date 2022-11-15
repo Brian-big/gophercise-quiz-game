@@ -2,19 +2,22 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
 func main() {
 	fmt.Println("=+=+=+=+=+=+Go Channels=+=+=+=+=+=+")
 
+	var wg sync.WaitGroup
+	wg.Add(1)
+
 	go func() {
 		count("Lion")
+		wg.Done()
 	}()
-	go func ()  {
-		count("Mike")
-	}()
-	count("Sheep")
+
+	wg.Wait()
 
 }
 
