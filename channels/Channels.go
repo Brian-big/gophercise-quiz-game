@@ -2,29 +2,27 @@ package main
 
 import (
 	"fmt"
-	"sync"
 	"time"
 )
 
 func main() {
 	fmt.Println("=+=+=+=+=+=+Go Channels=+=+=+=+=+=+")
 
-	var wg sync.WaitGroup
-	wg.Add(1)
+	channel := make(chan string)
 
-	go func() {
-		count("Lion")
-		wg.Done()
-	}()
-
-	wg.Wait()
+	go count("Lion", channel)
+	for {
+		msg := <-channel
+		fmt.Println(msg)
+	}
 
 }
 
-func count(thing string) {
+func count(thing string, c chan string) {
 	fmt.Println("======> Counting", thing, "<======")
 	for i := 1; i <= 10; i++ {
-		fmt.Println(i, thing)
+		c <- fmt.Sprintf("%d %s",i, thing)
 		time.Sleep(500 * time.Millisecond)
 	}
+	close(c)
 }
