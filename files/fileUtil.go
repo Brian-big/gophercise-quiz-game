@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"io/fs"
@@ -100,6 +101,21 @@ func ReadFileContents(fileName string) {
 	fmt.Println(string(contents))
 }
 
+func ReadFileContentsByLine(fileName string) {
+	file, err := os.Open(fileName)
+
+	if err != nil {
+		log.Fatal(err.Error())
+		return
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
+}
+
 func main() {
 
 	fileName := flag.String("name", "example.txt", "name of the file you want to create")
@@ -123,6 +139,12 @@ func main() {
 	ReadFileInfo(*fileName)
 	fmt.Println("\n*************File Contents*****************")
 	ReadFileContents(*fileName)
+	fmt.Println("***********End File Contents***************")
+
+	// readFile
+	fmt.Println("\n*************File Contents*****************")
+	*fileName = "file.dat"
+	ReadFileContentsByLine(*fileName)
 	fmt.Println("***********End File Contents***************")
 
 }
