@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"io/fs"
+	"io/ioutil"
 	"log"
 	"os"
 )
@@ -73,7 +74,7 @@ func AppendFile(fileName string, data string) os.File {
 	return *file
 }
 
-func ReadFile(fileName string) {
+func ReadFileInfo(fileName string) {
 	file, err := os.Open(fileName)
 
 	if err != nil {
@@ -84,10 +85,19 @@ func ReadFile(fileName string) {
 	fileInfo, err := file.Stat()
 	if err != nil {
 		log.Fatal(err.Error())
+		return
 	}
 	fmt.Println("=======>File info:")
-	fmt.Printf("|=> file Name: %s\n|=> Modified: %s\n|=> Mode: %s\n|=> Size: %d bytes\n======================", fileInfo.Name(), fileInfo.ModTime(), fileInfo.Mode(), fileInfo.Size())
+	fmt.Printf("|=> file Name: %s\n|=> Modified: %s\n|=> Mode: %s\n|=> Size: %d bytes\n======================", fileInfo.Name(), fileInfo.ModTime().Format("15:04:03"), fileInfo.Mode(), fileInfo.Size())
+}
 
+func ReadFileContents(fileName string) {
+	contents, err := ioutil.ReadFile(fileName)
+	if err != nil {
+		log.Fatal(err.Error())
+		return
+	}
+	fmt.Println(string(contents))
 }
 
 func main() {
@@ -110,5 +120,9 @@ func main() {
 	AppendFile(*fileName, *content)
 
 	// readFile
-	ReadFile(*fileName)
+	ReadFileInfo(*fileName)
+	fmt.Println("\n*************File Contents*****************")
+	ReadFileContents(*fileName)
+	fmt.Println("***********End File Contents***************")
+
 }
