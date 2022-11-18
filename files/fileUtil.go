@@ -2,6 +2,7 @@ package files
 
 import (
 	"fmt"
+	"io/fs"
 	"log"
 	"os"
 )
@@ -44,6 +45,31 @@ func WriteByLines(fileName string, data []string) os.File {
 		}
 
 	}
+	return *file
+
+}
+
+// function to append content to a given text
+func AppendFile(fileName string, data string) os.File {
+	file, err := os.OpenFile(fileName,
+		os.O_APPEND|os.O_WRONLY,
+		fs.ModeAppend)
+	if err != nil {
+		log.Fatal("Could not open file:", err.Error())
+	}
+	defer file.Close()
+
+	if len(data) == 0 {
+		content := "Appended this line as default"
+		data = content
+	}
+
+	_, writeErr := fmt.Fprintln(file, data)
+
+	if writeErr != nil {
+		log.Fatal(writeErr.Error())
+	}
+
 	return *file
 
 }

@@ -20,4 +20,7 @@ func main() {
 	files.CreateFile(*fileName, []byte(*content))
 
 	files.WriteByLines(*fileName, lines)
+
+	//test append Function
+	files.AppendFile(*fileName, *content)
 }
