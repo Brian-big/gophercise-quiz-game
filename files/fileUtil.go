@@ -1,11 +1,11 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/fs"
 	"log"
 	"os"
-	"flag"
 )
 
 func CreateFile(FileName string, data []byte) os.File {
@@ -47,7 +47,6 @@ func WriteByLines(fileName string, data []string) os.File {
 
 	}
 	return *file
-
 }
 
 // function to append content to a given text
@@ -72,9 +71,26 @@ func AppendFile(fileName string, data string) os.File {
 	}
 
 	return *file
+}
+
+func ReadFile(fileName string) {
+	file, err := os.Open(fileName)
+
+	if err != nil {
+		log.Fatal(err.Error())
+		return
+	}
+	defer file.Close()
+	fileInfo, err := file.Stat()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	fmt.Println("=======>File info:")
+	fmt.Printf("|=> file Name: %s\n|=> Modified: %s\n|=> Mode: %s\n|=> Size: %d bytes\n======================", fileInfo.Name(), fileInfo.ModTime(), fileInfo.Mode(), fileInfo.Size())
 
 }
-func main(){
+
+func main() {
 
 	fileName := flag.String("name", "example.txt", "name of the file you want to create")
 	content := flag.String("content", "", "text content you want to write in the file")
@@ -92,4 +108,7 @@ func main(){
 
 	//test append Function
 	AppendFile(*fileName, *content)
+
+	// readFile
+	ReadFile(*fileName)
 }
