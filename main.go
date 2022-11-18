@@ -12,5 +12,5 @@ func main() {
 
 	flag.Parse()
 
-	files.CreateFile(*fileName, *content)
+	files.CreateFile(*fileName, []byte(*content))
 }

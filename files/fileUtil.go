@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	
 )
 
-func CreateFile(FileName string, content string) os.File {
+func CreateFile(FileName string, data []byte) os.File {
 	file, err := os.Create(FileName)
 
 	if err != nil {
@@ -15,11 +16,12 @@ func CreateFile(FileName string, content string) os.File {
 
 	defer file.Close()
 
-	if len(content) == 0 {
-		content = "Empty file. Ready to write"
+	if len(data) == 0 {
+		content := "Empty file. Ready to write"
+		data = []byte(content)
 	}
 
-	n, err := file.WriteString(content)
+	n, err := file.Write(data)
 	if err != nil {
 		log.Fatal("Could not write content to file ", err.Error())
 	}
