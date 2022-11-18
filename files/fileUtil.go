@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	
 )
 
 func CreateFile(FileName string, data []byte) os.File {
@@ -28,4 +27,23 @@ func CreateFile(FileName string, data []byte) os.File {
 	log.Output(n, fmt.Sprintf("Content of size %d wrote to file", n))
 
 	return *file
+}
+
+func WriteByLines(fileName string, data []string) os.File {
+	file, err := os.Create(fileName)
+	if err != nil {
+		log.Fatal("An error occured", err.Error())
+	}
+	defer file.Close()
+
+	for _, line := range data {
+
+		_, err := fmt.Fprintln(file, line)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+
+	}
+	return *file
+
 }

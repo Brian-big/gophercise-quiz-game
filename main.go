@@ -12,5 +12,12 @@ func main() {
 
 	flag.Parse()
 
+	lines := []string{
+		"Hello, let's write line by line",
+		"Have you ever had a story you wanted so bad to tell?",
+		"Well, I will help you tell the world your story",
+	}
 	files.CreateFile(*fileName, []byte(*content))
+
+	files.WriteByLines(*fileName, lines)
 }
